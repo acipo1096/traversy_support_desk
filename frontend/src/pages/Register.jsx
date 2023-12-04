@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { FaUser } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux"; // useSelector lets us select from global state, useDispatch dispatches our actions
 import { register, reset } from "../features/auth/authSlice";
+import Spinner from "../components/Spinner";
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -24,17 +25,17 @@ function Register() {
   );
 
   useEffect(() => {
-    if(isError) {
-      toast.error(message)
+    if (isError) {
+      toast.error(message);
     }
 
     // Redirect when logged in
-    if(isSuccess || user) {
-      navigate('/')
+    if (isSuccess || user) {
+      navigate("/");
     }
 
-    dispatch(reset())
-  }, [isError, isSuccess, user, message, navigate, dispatch])
+    dispatch(reset());
+  }, [isError, isSuccess, user, message, navigate, dispatch]);
 
   const onChange = (e) => {
     setFormData((prevState) => ({
@@ -58,6 +59,10 @@ function Register() {
       dispatch(register(userData));
     }
   };
+
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   return (
     <>
